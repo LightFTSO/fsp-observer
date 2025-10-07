@@ -13,10 +13,14 @@ LOGGER = logging.getLogger()
 
 
 def main(config: Configuration):
+    mb = Message.builder().add(network=config.chain_id)
     try:
+        message = mb.build(
+            MessageLevel.INFO,
+            (f"Observer initializing"),
+        )
         asyncio.run(observer_loop(config))
     except Exception as e:
-        mb = Message.builder().add(network=config.chain_id)
         message = mb.build(
             MessageLevel.CRITICAL,
             (f"observer crashed (traceback in logs) - {e}"),
